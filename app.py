@@ -1,7 +1,8 @@
 import os
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
-from langchain.document_loaders import DirectoryLoader
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_community.document_loaders import TextLoader, DirectoryLoader
+
 
 load_dotenv()
 
@@ -23,10 +24,8 @@ for chunk in response:
     print(chunk.content, end="", flush=True)
 
 
-# load files from a directory
-DATA_PATH = "data"
+# load text files from a directory
+loader = DirectoryLoader('./data', glob="**/*.md", loader_cls=TextLoader)
+documents = loader.load()
+print(documents[0].page_content[:100])
 
-def load_documents():
-    loader = DirectoryLoader(DATA_PATH, glob="*.md")
-    documents = loader.load()
-    return documents
